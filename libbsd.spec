@@ -1,6 +1,6 @@
 Name:           libbsd
 Version:        0.10.0
-Release:        1
+Release:        2
 Summary:        Library providing BSD-compatible functions for portability
 URL:            http://libbsd.freedesktop.org/
 License:        BSD and ISC and Copyright only and Public Domain
@@ -8,6 +8,7 @@ License:        BSD and ISC and Copyright only and Public Domain
 Source0:        http://libbsd.freedesktop.org/releases/libbsd-%{version}.tar.xz
 # Use symver attribute for symbol versioning
 Patch1:         %{name}-symver.patch
+Patch2:         fix-clang.patch
 
 BuildRequires:  gcc
 BuildRequires:  autoconf automake libtool
@@ -39,6 +40,7 @@ configured using "pkg-config --libs libbsd-ctor".
 %setup -q
 
 %patch1 -p1 -b .symver
+%patch2 -p1
 
 %build
 autoreconf -fiv
@@ -77,5 +79,8 @@ rm %{buildroot}%{_mandir}/man3/explicit_bzero.3bsd
 %{_libdir}/pkgconfig/%{name}-ctor.pc
 
 %changelog
+* Sat May 06 2023 yoo <sunyuechi@iscas.ac.cn> - 0.10.0-2
+- fix clang build error
+
 * Fri Jul 15 2022 misaka00251 <misaka00251@misakanet.cn> - 0.10.0-1
 - Init package (Thanks to fedora team)
