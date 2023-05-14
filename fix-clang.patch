@@ -1,0 +1,21 @@
+diff -u -r libbsd-0.10.0/src/setproctitle.c libbsd-0.10.0/src/setproctitle.c
+--- libbsd-0.10.0/src/setproctitle.c	2019-08-08 09:22:09.000000000 +0800
++++ libbsd-0.10.0/src/setproctitle.c	2023-05-04 10:53:53.000000000 +0800
+@@ -289,12 +289,15 @@
+  * new version, so that new code depends on the implemented version. */
+ #ifdef HAVE_TYPEOF
+ extern __typeof__(setproctitle_impl)
+-libbsd_symver_variant(setproctitle, setproctitle_stub, LIBBSD_0.2)
+ setproctitle_stub
+ 	__attribute__((__alias__("setproctitle_impl")));
+ #else
+ void
+-libbsd_symver_variant(setproctitle, setproctitle_stub, LIBBSD_0.2)
+ setproctitle_stub(const char *fmt, ...)
+ 	__attribute__((__alias__("setproctitle_impl")));
+ #endif
++#if defined(__clang__)
++__asm__(".symver setproctitle,setproctitle@LIBBSD_0.2");
++#elif defined(__GNUC__)
++libbsd_symver_variant(setproctitle, setproctitle_stub, LIBBSD_0.2)
++#endif
